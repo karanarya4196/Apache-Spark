@@ -1,3 +1,12 @@
 ## Cost-Based Optimizer
 
 Spark SQL can use a Cost-Based Optimizer (CBO) to improve query plans. This is especially useful for queries with multiple joins. For this to work it is critical to collect table and column statistics and keep them up to date.
+
+### FAQ
+
+spark.sql.cbo.enabled=true with Hive table?
+
+Yes CBO (spark.sql.cbo.enabled=true) is useful with Hive tables also.
+
+Explanation:
+A HiveTable in Spark is represented by HiveTableRelation class. A Spark table (or a DataSource table) is represented by LogicalRelation class. Both of these classes extends LeadNode. Spark abstracts out the stats of all sorts of LogicalPlan using the "computeStats" method. Every class can gives its implementation for computeStats. If the code we can see that HiveTableRelation class has overridden this method to return table and column level stats if they are available. Same thing is done by LogicalRelation class.
