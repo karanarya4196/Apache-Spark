@@ -1,6 +1,18 @@
 ## Cost-Based Optimizer
 
-Spark SQL can use a Cost-Based Optimizer (CBO) to improve query plans. This is especially useful for queries with multiple joins. For this to work it is critical to collect table and column statistics and keep them up to date.
+Cost based optimizer is an optimization rule engine which selects the cheapest execution plan for a query based on various table statistics. CBO tries to optimize the execution of the query with respect to CPU utilization and I/O, thus returning as quickly as possible.
+
+Cost Plan:
+
+Last and final part of the piece is how does spark decides which plan execute. Spark uses the statistics computed for the different operation to compute the cost of a query plan. The cost generally has two parts :
+ a. CPU cost 
+ b. I/O cost
+
+In spark, this is calculated using the following formula:
+
+weight * cardinality + (1 — weight)*size
+here, weight is a tuning parameter and can be configured via spark.sql.cbo.joinReorder.card.weight . By default, its value is 0.7.
+
 
 ### FAQ
 
