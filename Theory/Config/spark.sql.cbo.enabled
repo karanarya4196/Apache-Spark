@@ -1,0 +1,3 @@
+## Cost-Based Optimizer
+
+Spark SQL can use a Cost-Based Optimizer (CBO) to improve query plans. This is especially useful for queries with multiple joins. For this to work it is critical to collect table and column statistics and keep them up to date.
