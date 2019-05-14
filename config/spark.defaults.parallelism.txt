@@ -1,0 +1,1 @@
+Partitions for RDDs produced by parallelize come from the parameter given by the user, or spark.default.parallelism if none is given.

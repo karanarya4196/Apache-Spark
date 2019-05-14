@@ -1,0 +1,6 @@
+In apache spark, it’s advised to use the kryo serialization over java serialization for big data applications. Kryo has less memory footprint compared to java serialization which becomes very important when you are shuffling and caching large amount of data.
+
+Though kryo is supported for RDD caching and shuffling, it’s not natively supported to serialize to the disk. Both methods, saveAsObjectFile on RDD and objectFile method on SparkContext supports only java serialization.
+
+As number of custom data types increases it’s tedious to support multiple serialization’s. So it will be nice if we can use kryo serialization everywhere.
+

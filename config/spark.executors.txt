@@ -1,0 +1,47 @@
+Spark uses a master/slave architecture. It has one central coordinator (Driver) that communicates with many distributed workers (executors). The driver and each of the executors run in their own Java processes.
+
+EXECUTORS
+
+Executors are worker nodes' processes in charge of running individual tasks in a given Spark job. They are launched at the beginning of a Spark application and typically run for the entire lifetime of an application. Once they have run the task they send the results to the driver. They also provide in-memory storage for RDDs that are cached by user programs through Block Manager.
+
+APPLICATION EXECUTION FLOW
+
+With this in mind, when you submit an application to the cluster with spark-submit this is what happens internally:
+
+A standalone application starts and instantiates a SparkContext instance (and it is only then when you can call the application a driver).
+The driver program ask for resources to the cluster manager to launch executors.
+The cluster manager launches executors.
+The driver process runs through the user application. Depending on the actions and transformations over RDDs task are sent to executors.
+Executors run the tasks and save the results.
+If any worker crashes, its tasks will be sent to different executors to be processed again.
+With SparkContext.stop() from the driver or if the main method exits/crashes all the executors will be terminated and the cluster resources will be released by the cluster manager.
+
+FAQ
+
+-- Executors are per application. Then what is role of a worker? Does it co-ordinate with the executor and communicate the result back to the driver? or does the driver directly talks to the executor? If so, what is worker's purpose then?
+
+When executors are started they register themselves with the driver and from so on they communicate directly. The workers are in charge of communicating the cluster manager the availability of their resources.
+
+
+-- How to control the number of executors for an application? 3.Can the tasks be made to run in parallel inside the executor? If so, how to configure the number of threads for an executor?
+
+In a YARN cluster you can do that with --num-executors. In a standalone cluster you will get one executor per worker unless you play with spark.executor.cores and a worker has enough cores to hold more than one executor.
+
+-- What is the relation between worker, executors and executor cores ( --total-executor-cores)?
+
+You can assign the number of cores per executor with --executor-cores
+total-executor-cores is the max number of executor cores per application
+
+
+-- What does it mean to have more workers per node?
+
+There's not a good reason to run more than one worker per machine. You would have many JVM sitting in one machine for instance.
+
+--- The number of cores can be specified with the --executor-cores flag when invoking spark-submit, spark-shell, and pyspark from the command line, or by setting the spark.executor.cores property in the spark-defaults.conf file or on a SparkConf object. 
+--- The heap size can be controlled with the --executor-memory flag or the spark.executor.memory property. executor-memory/spark.executor.memory controls the executor heap size, but JVMs can also use some memory off heap, for example for interned Strings and direct byte buffers. 
+--- The --num-executors command-line flag or spark.executor.instances configuration property control the number of executors requested. 
+--- Starting in CDH 5.4/Spark 1.3, you will be able to avoid setting this property by turning on dynamic allocation with the spark.dynamicAllocation.enabled property. Dynamic allocation enables a Spark application to request executors when there is a backlog of pending tasks and free up executors when idle.
+--- The value of the spark.yarn.executor.memoryOverhead property is added to the executor memory to determine the full memory request to YARN for each executor. It defaults to max(384, .07 * spark.executor.memory).
+--- YARN may round the requested memory up a little. YARN’s yarn.scheduler.minimum-allocation-mb and yarn.scheduler.increment-allocation-mb properties control the minimum and increment request values respectively.
+--- yarn.nodemanager.resource.memory-mb controls the maximum sum of memory used by the containers on each node.
+--- yarn.nodemanager.resource.cpu-vcores controls the maximum sum of cores used by the containers on each node.
