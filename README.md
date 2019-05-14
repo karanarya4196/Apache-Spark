@@ -2,8 +2,11 @@
 
 ## Versions
 PySpark: 2.2.3
+
 Python: 2.7.12
+
 XGBoost: 0.72
+
 JohnSnowLabs Spark-NLP: 1.2.3
 
 ## Model Workflow:
