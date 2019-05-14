@@ -1,4 +1,4 @@
-# PySpark
+# PySpark Model
 
 The repository represents the PySpark model workflow:
 1. Column names mapping
