@@ -9,7 +9,7 @@ XGBoost: 0.72
 
 JohnSnowLabs Spark-NLP: 1.2.3
 
-## Model Workflow:
+## Workflow:
 1. Column names mapping
 2. Convert data types
 3. Create missing indicators
