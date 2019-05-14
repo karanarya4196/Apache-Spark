@@ -1,5 +1,12 @@
 # PySpark Model
 
+## Versions
+
+### PySpark: 2.2.3
+### Python: 2.7.12
+### XGBoost: 0.72
+### JohnSnowLabs Spark-NLP: 1.2.3
+
 The repository represents the PySpark model workflow:
 1. Column names mapping
 2. Convert data types
